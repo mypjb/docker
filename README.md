@@ -1,2 +1,2 @@
 # docker
-docker build file
+this is local docker build script

@@ -38,5 +38,5 @@ COMMON_ARGS=" --restart=always --net=${NETWORK}"
 
 #docker volume create nginx
 
-#docker run --name nginx -d -v nginx:/etc/nginx $COMMON_ARGS -p 80:80 $NGINX_TAG
+docker run --name nginx -d -v nginx:/etc/nginx $COMMON_ARGS -p 80:80 -p 443:443 $NGINX_TAG
 

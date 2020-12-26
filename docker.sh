@@ -62,4 +62,5 @@ COMMON_ARGS=" run -d --restart=always --net=${NETWORK} -v /etc/resolv.conf:/etc/
 
 ##build
 #docker pull mypjb/dotnet-core-sdk:5.0
+#docker pull mypjb/dotnet-core-aspnet:5.0
 #docker pull andrewmackrodt/nodejs:12

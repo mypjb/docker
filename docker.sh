@@ -9,7 +9,7 @@ MONGO_TAG="mongo:4.4.2"
 NGINX_TAG="nginx:1.19.6"
 DNS_TAG=" --cap-add=NET_ADMIN andyshinn/dnsmasq:2.81 "
 BAGET_TAG="loicsharma/baget:latest"
-BUILD_TAGS=(mypjb/dotnet-core-sdk:5.0 mypjb/dotnet-core-aspnet:5.0 andrewmackrodt/nodejs:12)
+BUILD_TAGS=(mypjb/dotnet-core-sdk:5.0 mypjb/dotnet-core-aspnet:5.0 davidkassa/yarn-angular-cli-firebase-tools:latest)
 NETWORK="cluster"
 DOCKER_VOLUME_PATH=/var/lib/docker/volumes
 COMMON_ARGS=" run -d --restart=always --net=${NETWORK} "

@@ -1,6 +1,9 @@
 #!/bin/bash
 
 bash_dir=$(cd $(dirname $0); pwd)
+bash_dir=$bash_dir/docker
+
+cd $bash_dir
 
 echo FROM k8s.gcr.io/kube-apiserver:v1.22.1 > kube-apiserver
 echo FROM k8s.gcr.io/kube-controller-manager:v1.22.1 > kube-controller-manager

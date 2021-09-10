@@ -2,6 +2,8 @@
 
 echo install apt-key
 
+apt install -y gnupg
+
 apt-key add k8s/apt-key.gpg
 
 echo download kubelet kubeadm kubectl kubernetes-cni cri-tools package

@@ -2,7 +2,7 @@
 
 echo install apt-key
 
-apt install -y gnupg
+apt install -y gnupg curl
 
 apt-key add k8s/apt-key.gpg
 

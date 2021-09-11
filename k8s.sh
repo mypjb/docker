@@ -33,3 +33,15 @@ dpkg -i kubectl.deb
 
 echo install kubeadm
 dpkg -i kubeadm.deb 
+
+kubeadm config images pull --image-repository  registry.cn-hangzhou.aliyuncs.com/mypjb
+
+ctr -n k8s.io images tag registry.cn-hangzhou.aliyuncs.com/mypjb/kube-apiserver:v1.22.1 k8s.gcr.io/kube-apiserver:v1.22.1
+ctr -n k8s.io images tag registry.cn-hangzhou.aliyuncs.com/mypjb/kube-controller-manager:v1.22.1 k8s.gcr.io/kube-controller-manager:v1.22.1
+ctr -n k8s.io images tag registry.cn-hangzhou.aliyuncs.com/mypjb/kube-scheduler:v1.22.1 k8s.gcr.io/kube-scheduler:v1.22.1
+ctr -n k8s.io images tag registry.cn-hangzhou.aliyuncs.com/mypjb/kube-proxy:v1.22.1 k8s.gcr.io/kube-proxy:v1.22.1
+ctr -n k8s.io images tag registry.cn-hangzhou.aliyuncs.com/mypjb/pause:3.5 k8s.gcr.io/pause:3.5
+ctr -n k8s.io images tag registry.cn-hangzhou.aliyuncs.com/mypjb/etcd:3.5.0-0 k8s.gcr.io/etcd:3.5.0-0
+ctr -n k8s.io images tag registry.cn-hangzhou.aliyuncs.com/mypjb/coredns:v1.8.4 k8s.gcr.io/coredns:v1.8.4
+
+echo -e "\tNow initialize the cluster with the following command\n\tkubeadm init --image-repository  registry.cn-hangzhou.aliyuncs.com/mypjb --node-name $(hostname) --control-plane-endpoint $(hostname)  --v=5"

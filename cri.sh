@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt-get install -y libseccomp2
+apt-get install -y libseccomp2 curl
 
 curl -L -o cri-containerd-cni-linux-amd64.tar.gz https://github.com/containerd/containerd/releases/download/v1.5.5/cri-containerd-cni-1.5.5-linux-amd64.tar.gz
 
@@ -59,5 +59,3 @@ systemctl start containerd
 
 crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock 
 crictl config --set image-endpoint=unix:///run/containerd/containerd.sock
-
-echo -e '\tIf you do not configure the default kubedm container runtime, the following commands are recommended \n\techo -e "export CONTAINER_RUNTIME_ENDPOINT=unix:///run/containerd/containerd.sock\\nexport IMAGE_SERVICE_ENDPOINT=unix:///run/containerd/containerd.sock" >> /etc/profile'

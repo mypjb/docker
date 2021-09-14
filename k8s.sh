@@ -2,7 +2,7 @@
 
 echo install apt-key
 
-apt install -y gnupg curl
+apt install -y gnupg curl bash-completion
 
 apt-key add k8s/apt-key.gpg
 
@@ -45,3 +45,5 @@ ctr -n k8s.io images tag registry.cn-hangzhou.aliyuncs.com/mypjb/etcd:3.5.0-0 k8
 ctr -n k8s.io images tag registry.cn-hangzhou.aliyuncs.com/mypjb/coredns:v1.8.4 k8s.gcr.io/coredns:v1.8.4
 
 echo -e "\tNow initialize the cluster with the following command\n\tkubeadm init --image-repository  registry.cn-hangzhou.aliyuncs.com/mypjb --node-name $(hostname) --control-plane-endpoint $(hostname)  --v=5"
+
+kubectl completion bash > /etc/bash_completion.d/kubectl

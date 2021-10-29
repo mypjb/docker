@@ -11,7 +11,7 @@ apt-get install -y libseccomp2 curl
 
 echo "download containerd install package"
 
-curl -L -ok $containerd_install_file https://github.com/containerd/containerd/releases/download/v${containerd_version}/cri-containerd-cni-${containerd_version}-linux-amd64.tar.gz
+curl -L -o $containerd_install_file https://github.com/containerd/containerd/releases/download/v${containerd_version}/cri-containerd-cni-${containerd_version}-linux-amd64.tar.gz
 
 echo "decompression and install containerd"
 

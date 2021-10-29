@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit
 
 containerd_version=v1.5.7
 

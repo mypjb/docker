@@ -43,6 +43,7 @@ apt install -y iptables socat ebtables ethtool conntrack
 for pack in ${packs[@]};do
 	echo install $pack
 	dpkg -i ${pack}.deb
+	rm ${pack}.deb
 done
 
 

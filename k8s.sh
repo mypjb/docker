@@ -47,7 +47,7 @@ for pack in ${packs[@]};do
 done
 
 
-echo -e 'pull zh image-repository "${image_url}"'
+echo -e "pull zh image-repository $(image_url)"
 
 kubeadm config images pull --image-repository  $image_url
 

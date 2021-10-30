@@ -16,15 +16,15 @@ apt-key add k8s/apt-key.gpg
 
 echo download kubelet kubeadm kubectl kubernetes-cni cri-tools package
 
-kubelet_pack=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt/pool/kubelet_1.22.1-00_amd64_240cc59b5f8e44719af21b90161d32297679376f5a4d45ffd4795685ef305538.deb
+kubelet_pack=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt/pool/kubelet_1.22.3-00_amd64_59638c5e6a1f6ffa59569efc8bd8bcdd00709dfdf5b11f209491cb30b9c546f5.deb
 
-kubeadm_pack=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt/pool/kubeadm_1.22.1-00_amd64_2e8580f3165ea2f19ba84ac4237dad873cc9915214b3f8f5ca2e98c7a8ecd3e1.deb
+kubeadm_pack=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt/pool/kubeadm_1.22.3-00_amd64_18966903d3cc24909e806b8f28f7a25a408d0a89c4ce6555e186ed2364f21c3c.deb
 
-kubectl_pack=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt/pool/kubectl_1.22.1-00_amd64_2a00cd912bfa610fe4932bc0a557b2dd7b95b2c8bff9d001dc6b3d34323edf7d.deb
+kubectl_pack=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt/pool/kubectl_1.22.3-00_amd64_41b047d8823ded626c16f65fb9af0c8b0ef983815aeb2bbd9ae38c19d2471393.deb
 
 kubernetes_cni_pack=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt/pool/kubernetes-cni_0.8.7-00_amd64_ca2303ea0eecadf379c65bad855f9ad7c95c16502c0e7b3d50edcb53403c500f.deb
 
-cri_tools_pack=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt/pool/cri-tools_1.13.0-01_amd64_4ff4588f5589826775f4a3bebd95aec5b9fb591ba8fb89a62845ffa8efe8cf22.deb
+cri_tools_pack=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt/pool/cri-tools_1.19.0-00_amd64_b6fdfd86c8a3665ab10b9bd9565354977cd5abbaefeb2ee953bc4a13fe7d3326.deb
 
 curl -L -o kubelet.deb $kubelet_pack
 

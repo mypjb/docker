@@ -3,7 +3,7 @@
 bash_dir=$(cd $(dirname $0); pwd)
 bash_dir=$bash_dir/docker
 
-k8s_version=v1.22.3
+k8s_version=v1.22.1
 
 cd $bash_dir
 

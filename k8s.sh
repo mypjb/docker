@@ -67,3 +67,6 @@ done
 echo -e "\tNow initialize the cluster with the following command\n\tkubeadm init --image-repository  registry.cn-hangzhou.aliyuncs.com/mypjb --node-name $(hostname) --control-plane-endpoint $(hostname)  --v=5"
 
 kubectl completion bash > /etc/bash_completion.d/kubectl
+
+echo "After installation,you can run the following command to set kubectl "
+echo 'echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> /etc/profile.d/kubernetes.sh && source /etc/profile && echo $KUBECONFIG'

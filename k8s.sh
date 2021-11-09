@@ -6,7 +6,7 @@ echo install apt-key
 #k8s version
 k8s_version=v1.22.3
 
-image_url=registry.cn-hangzhou.aliyuncs.com/mypjb
+image_url=registry.cn-beijing.aliyuncs.com/mypjb
 
 packs=(cri-tools kubernetes-cni kubelet kubectl kubeadm)
 
@@ -45,9 +45,6 @@ for pack in ${packs[@]};do
 	dpkg -i ${pack}.deb
 	rm ${pack}.deb
 done
-
-
-echo -e "pull zh image-repository $(image_url)"
 
 kubeadm config images pull --image-repository  $image_url
 

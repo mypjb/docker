@@ -16,3 +16,4 @@ echo FROM k8s.gcr.io/etcd:3.5.0-0 > etcd
 echo FROM k8s.gcr.io/coredns/coredns:v1.8.4 > coredns
 echo FROM docker.io/kubernetesui/dashboard:v2.4.0 > dashboard
 echo FROM docker.io/kubernetesui/metrics-scraper:v1.0.7 > metrics-scraper
+echo FROM quay.io/cilium/cilium:v1.10.5 > cilium

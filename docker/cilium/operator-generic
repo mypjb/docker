@@ -1,0 +1,1 @@
+FROM quay.io/cilium/operator-generic:1.10.5

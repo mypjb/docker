@@ -1,0 +1,1 @@
+FROM quay.io/cilium/cilium:1.10.5

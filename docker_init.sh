@@ -6,7 +6,7 @@ bash_dir=$bash_dir/docker
 cd $bash_dir
 
 k8s_version=v1.22.3
-cilium_version=1.10.5
+cilium_version=v1.10.5
 gloo_version=1.9.1
 
 k8s_dir=k8s

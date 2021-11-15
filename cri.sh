@@ -9,15 +9,24 @@ container_runtime_endpoint=unix:///run/containerd/containerd.sock
 
 apt-get install -y libseccomp2 curl
 
-echo "download containerd install package"
+if [ -f "${containerd_install_file}" ];then
 
-curl -L -o $containerd_install_file https://github.com/containerd/containerd/releases/download/v${containerd_version}/cri-containerd-cni-${containerd_version}-linux-amd64.tar.gz
+	echo "containerd package file exit"
+	
+else
+
+	echo "download containerd install package"
+
+	curl -L -o $containerd_install_file https://github.com/containerd/containerd/releases/download/v${containerd_version}/cri-containerd-cni-${containerd_version}-linux-amd64.tar.gz
+
+fi
 
 echo "decompression and install containerd"
 
 tar --no-overwrite-dir -C / -xzf $containerd_install_file
 
 echo -e "rm install package ${containerd_install_file}"
+
 rm -rf $containerd_install_file
 
 echo "start-up containerd";

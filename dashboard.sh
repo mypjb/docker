@@ -10,7 +10,7 @@ if [ "${1}" == "pull" ];then
 	echo "pull images"
 
 	for image_command in "${image_commands[@]}";do
-		$image_command
+		bash -c "$image_command"
 	done
 	
 else

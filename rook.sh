@@ -13,7 +13,7 @@ image_commands[2]="ctr -n ${ctr_ns} image pull ${image_url}/sig-storage-csi-resi
 
 image_commands[3]="ctr -n ${ctr_ns} image pull ${image_url}/sig-storage-csi-provisioner:v3.0.0 && ctr -n ${ctr_ns} image tag ${image_url}/sig-storage-csi-provisioner:v3.0.0 ${k8s_ns}/sig-storage/csi-provisioner:v3.0.0"
 
-image_commands[4]="ctr -n ${ctr_ns} image pull ${image_url}/sig-storage-csi-attacher:v3.3.0 && ctr -n ${ctr_ns} image tag  ${image_url}/sig-storage-csi-attacher:v3.3.0 ${image_url}/sig-storage-csi-attacher:v3.3.0 ${k8s_ns}/sig-storage/csi-attacher:v3.3.0"
+image_commands[4]="ctr -n ${ctr_ns} image pull ${image_url}/sig-storage-csi-attacher:v3.3.0 && ctr -n ${ctr_ns} image tag  ${image_url}/sig-storage-csi-attacher:v3.3.0 ${k8s_ns}/sig-storage/csi-attacher:v3.3.0"
 
 if [ "${1}" == "pull" ];then
 

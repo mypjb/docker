@@ -16,7 +16,12 @@ if [ "${1}" == "pull" ];then
 
 	for image_command in "${image_commands[@]}";do
 		bash -c "$image_command"
-	done	
+	done
+
+elif [ "${1}" == "gloo" ];then
+
+	sed -i "s/Bearer/Bearer $(kubectl -n kubernetes-dashboard get secrets $(kubectl -n kubernetes-dashboard get secrets | grep super-admin-token | cut -d ' ' -f 1) -o jsonpath='{.data.token}' | base64 --decode)/g" $dashboard_certs_dir/gloo-proxy.yaml
+	
 else
 
 	mkdir -p $dashboard_certs_dir

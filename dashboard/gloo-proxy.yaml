@@ -1,0 +1,40 @@
+apiVersion: gateway.solo.io/v1
+kind: VirtualService
+metadata:
+  name: k8s-ui
+  namespace: gloo-system
+spec:
+  displayName: k8s-ui
+  sslConfig:
+    secretRef:
+      name: kubernetes-dashboard-certs
+      namespace: kubernetes-dashboard
+    sniDomains:
+    - ui.k8s.lass.net
+  virtualHost:
+    domains:
+    - ui.k8s.lass.net
+    options:
+      headerManipulation:
+        requestHeadersToAdd:
+        - append: false
+          header:
+            key: Authorization
+            value: Bearer 
+    routes:
+    - matchers:
+      - prefix: /
+      routeAction:
+        single:
+          upstream:
+            name: kubernetes-dashboard-kubernetes-dashboard-443
+            namespace: gloo-system
+status:
+  statuses:
+    gloo-system:
+      reportedBy: gateway
+      state: 1
+      subresourceStatuses:
+        '*v1.Proxy.gloo-system.gateway-proxy':
+          reportedBy: gloo
+          state: 1

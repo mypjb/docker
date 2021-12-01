@@ -35,7 +35,7 @@ metadata:
   labels:
     k8s-app: kubernetes-dashboard
   annotations:
-    gloo.solo.io/sslService.secret: upstream-tls
+    gloo.solo.io/sslService.secret: kubernetes-dashboard-certs
   name: kubernetes-dashboard
   namespace: kubernetes-dashboard
 spec:

@@ -11,6 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
   glusterfs:
+    # Try running glusterfs using a container
     endpoints: glusterfs-cluster
     path: gv0
     readOnly: false

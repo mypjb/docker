@@ -2,6 +2,8 @@
 
 image_url=registry.cn-beijing.aliyuncs.com/mypjb
 
+dashboard_dir="dashboard"
+
 dashboard_certs_dir=${3:-"dashboard/certs"}
 
 dashboard_host=${2:-"ui.k8s.lass.net"}
@@ -20,7 +22,7 @@ if [ "${1}" == "pull" ];then
 
 elif [ "${1}" == "gloo" ];then
 
-	sed -i "s/Bearer/Bearer $(kubectl -n kubernetes-dashboard get secrets $(kubectl -n kubernetes-dashboard get secrets | grep super-admin-token | cut -d ' ' -f 1) -o jsonpath='{.data.token}' | base64 --decode)/g" $dashboard_certs_dir/gloo-proxy.yaml
+	sed -i "s/Bearer/Bearer $(kubectl -n kubernetes-dashboard get secrets $(kubectl -n kubernetes-dashboard get secrets | grep super-admin-token | cut -d ' ' -f 1) -o jsonpath='{.data.token}' | base64 --decode)/g" $dashboard_dir/gloo-proxy.yaml
 	
 else
 
@@ -43,7 +45,7 @@ else
 	--key $(pwd)/$dashboard_certs_dir/tls.key \
 	--cert $(pwd)/$dashboard_certs_dir/tls.crt
 	
-	kubectl apply -f dashboard/recommended.yaml
+	kubectl apply -f $dashboard_dir/recommended.yaml
 	
 	echo "Use the following command to pull the image in advance"
 

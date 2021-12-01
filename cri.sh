@@ -91,3 +91,16 @@ systemctl start containerd
 echo "setting k8s crictl container-runtime"
 crictl config --set runtime-endpoint=${container_runtime_endpoint} 
 crictl config --set image-endpoint=${container_runtime_endpoint}
+
+sed -i 's/config_path = ""/config_path = "\/etc\/containerd\/certs.d"/g'  /etc/containerd/config.toml
+
+mkdir -p /etc/containerd/certs.d/docker.io
+
+cat > /etc/containerd/certs.d/docker.io/hosts.toml << EOF
+server = "https://docker.mirrors.ustc.edu.cn"
+
+[host."https://0g0zcog9.mirror.aliyuncs.com"]
+  capabilities = ["pull", "resolve"]
+EOF
+
+systemctl restart containerd

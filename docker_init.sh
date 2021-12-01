@@ -47,3 +47,4 @@ echo FROM quay.io/solo-io/gloo:${gloo_version} > ${gloo_dir}/gloo
 
 
 
+

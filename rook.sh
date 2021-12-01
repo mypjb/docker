@@ -15,6 +15,10 @@ image_commands[3]="ctr -n ${ctr_ns} image pull ${image_url}/sig-storage-csi-prov
 
 image_commands[4]="ctr -n ${ctr_ns} image pull ${image_url}/sig-storage-csi-attacher:v3.3.0 && ctr -n ${ctr_ns} image tag  ${image_url}/sig-storage-csi-attacher:v3.3.0 ${k8s_ns}/sig-storage/csi-attacher:v3.3.0"
 
+image_commands[5]="ctr -n ${ctr_ns} image pull ${image_url}/ceph:v16.2.6 && ctr -n ${ctr_ns} image tag  ${image_url}/ceph:v16.2.6 quay.io/ceph/ceph:v16.2.6"
+
+image_commands[6]="ctr -n ${ctr_ns} image pull ${image_url}/cephcsi:v3.4.0 && ctr -n ${ctr_ns} image tag  ${image_url}/cephcsi:v3.4.0 quay.io/cephcsi/cephcsi:v3.4.0"
+
 if [ "${1}" == "pull" ];then
 
 	echo "pull images"

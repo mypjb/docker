@@ -22,8 +22,9 @@ if [ "${1}" == "pull" ];then
 
 elif [ "${1}" == "gloo" ];then
 
-	sed -i "s/Bearer/Bearer $(kubectl -n kubernetes-dashboard get secrets $(kubectl -n kubernetes-dashboard get secrets | grep super-admin-token | cut -d ' ' -f 1) -o jsonpath='{.data.token}' | base64 --decode)/g" $dashboard_dir/gloo-proxy.yaml
+	sed -i "s/Bearer .*/Bearer $(kubectl -n kubernetes-dashboard get secrets $(kubectl -n kubernetes-dashboard get secrets | grep super-admin-token | cut -d ' ' -f 1) -o jsonpath='{.data.token}' | base64 --decode)/g" $dashboard_dir/gloo-proxy.yaml
 	
+	kubectl apply -f $dashboard_dir/gloo-proxy.yaml
 else
 
 	mkdir -p $dashboard_certs_dir

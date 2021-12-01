@@ -31,6 +31,8 @@ else
 	
 	echo "Create kubernetes-dashboard-certs tls secret"
 	
+	kubectl create namespace kubernetes-dashboard
+	
 	kubectl -n kubernetes-dashboard create secret tls kubernetes-dashboard-certs --from-file $dashboard_certs_dir
 	
 	kubectl apply -f dashboard/recommended.yaml

@@ -33,6 +33,10 @@ else
 	
 	glooctl version
 	
+	glooctl completion bash > /etc/bash_completion.d/glooctl
+	
+	source <(glooctl completion bash)
+	
 	echo "Use the following command to install"
 
 	echo "glooctl install (gateway or ingress or knative)"

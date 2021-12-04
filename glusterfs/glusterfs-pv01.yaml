@@ -13,5 +13,6 @@ spec:
   glusterfs:
     # Try running glusterfs using a container
     endpoints: glusterfs-cluster
+    endpointsNamespace: default
     path: gv0
     readOnly: false

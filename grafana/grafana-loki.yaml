@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-loki
+  namespace: development
+  labels:
+    app: grafana-loki
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana-loki
+  template:
+    metadata:
+      labels:
+        app: grafana-loki
+    spec:
+      volumes:
+        - name: grafana-config
+          configMap:
+            name: grafana-config
+            items:
+            - key: 'loki-config.yaml'
+              path: 'loki-config.yaml'
+      containers:
+        - name: grafana-loki
+          image: grafana/loki:2.4.1
+          args:
+            - -config.file=/etc/loki/loki-config.yaml
+          ports:
+            - name: http-loki
+              containerPort: 3100
+              protocol: TCP
+            - name: grpc-loki
+              containerPort: 9096
+              protocol: TCP
+          volumeMounts:
+            - name: grafana-config
+              mountPath: /etc/loki

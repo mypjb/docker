@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: grafana-promtail
+  namespace: development
+  labels:
+    app: grafana-promtail
+spec:
+  selector:
+    matchLabels:
+      app: grafana-promtail
+  template:
+    metadata:
+      labels:
+        app: grafana-promtail
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: grafana-promtail
+        image: grafana/promtail:2.4.1
+        args:
+        - -config.file=/etc/promtail/promtail-config.yaml
+        resources:
+          limits:
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - name: containers-log
+          mountPath: /var/log/containers
+          readOnly: true
+        - name: grafana-config
+          mountPath: /etc/promtail
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: containers-log
+        hostPath:
+          path: /var/log/containers
+      - name: grafana-config
+        configMap:
+          name: grafana-config
+          items:
+          - key: promtail-config.yaml
+            path: promtail-config.yaml

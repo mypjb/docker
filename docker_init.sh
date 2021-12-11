@@ -30,6 +30,10 @@ echo FROM k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.3.0  > ${k8s_dir}/
 echo FROM k8s.gcr.io/sig-storage/csi-resizer:v1.3.0  > ${k8s_dir}/csi-resizer
 echo FROM k8s.gcr.io/sig-storage/csi-provisioner:v3.0.0  > ${k8s_dir}/csi-provisioner
 echo FROM k8s.gcr.io/sig-storage/csi-attacher:v3.3.0  > ${k8s_dir}/csi-attacher
+
+# k8s rbac
+echo FROM gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0  > ${k8s_dir}/kube-rbac-proxy
+
 #dashboard
 echo FROM docker.io/kubernetesui/dashboard:v2.4.0 > ${k8s_dashboard_dir}/dashboard
 echo FROM docker.io/kubernetesui/metrics-scraper:v1.0.7 > ${k8s_dashboard_dir}/metrics-scraper

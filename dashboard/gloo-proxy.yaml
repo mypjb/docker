@@ -20,7 +20,7 @@ spec:
         - append: false
           header:
             key: Authorization
-            value: Bearer 
+            value: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InFIUEJhS3VUZjVyT3MzUnFPUHVjckhuc09EcExPYUxjcHFiRkxGNmZNNDQifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJzdXBlci1hZG1pbi10b2tlbi0yenhiNiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJzdXBlci1hZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImRkMjg2ODk4LTRhM2QtNDFmOS04MzBkLTIyZmY4MTVhYmU5OSIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlcm5ldGVzLWRhc2hib2FyZDpzdXBlci1hZG1pbiJ9.f-b_954LRC7GSXwVBLB0Sc3Z3LgPRGtHkiXTbZ7hXyYY3oyynijwpaA44G6FWoBTeXUMxoHg3ciFicWGPIjX50rzb2LxSuGs0pwliIPCaESueVXaIEXsp0avwga7qAgU_XXnlQ24biDzBjzytl5eEL3_Kg9Ch634qSi8T4vB9u1jtVEUdEMQ1gbYMrRlAkOTVke2Wns6zLO7dguWGMk--CTswcmogSDSf3Vj-IYH8r7yMTOF_37XgjULFRsOWrajPIppadUpuT90ch39OOBrs3s4aVcVuuYEFn7J0DMV_T-5CQr2kb516DerV6UT3RC1pqCRiP42r00oFxHCjv0Kaw
     routes:
     - matchers:
       - prefix: /

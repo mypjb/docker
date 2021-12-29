@@ -61,7 +61,7 @@ for image in ${k8s_dependent_images[@]};do
 done
 
 
-echo -e "\tNow initialize the cluster with the following command\n\tkubeadm init --image-repository  ${image_url} --node-name $(hostname) --control-plane-endpoint $(hostname)  --v=5"
+echo -e "\tNow initialize the cluster with the following command\n\tkubeadm init --image-repository  ${image_url} --kubernetes-version ${k8s_version} --node-name $(hostname) --control-plane-endpoint $(hostname)  --v=5"
 
 kubectl completion bash > /etc/bash_completion.d/kubectl
 

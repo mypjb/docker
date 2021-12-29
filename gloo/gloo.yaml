@@ -22782,7 +22782,7 @@ spec:
       serviceAccountName: certgen
       restartPolicy: OnFailure
       containers:
-        - image: registry.cn-beijing.aliyuncs.com/mypjb/certgen:1.9.1
+        - image: registry.cn-beijing.aliyuncs.com/mypjb/gloo-certgen:1.9.1
           imagePullPolicy: IfNotPresent
           name: certgen
           securityContext:
@@ -23407,7 +23407,7 @@ spec:
     spec:
       serviceAccountName: discovery
       containers:
-      - image: registry.cn-beijing.aliyuncs.com/mypjb/discovery:1.9.1
+      - image: registry.cn-beijing.aliyuncs.com/mypjb/gloo-discovery:1.9.1
         imagePullPolicy: IfNotPresent
         name: discovery
         # container security context
@@ -23455,7 +23455,7 @@ spec:
     spec:
       serviceAccountName: gateway
       containers:
-      - image: registry.cn-beijing.aliyuncs.com/mypjb/gateway:1.9.1
+      - image: registry.cn-beijing.aliyuncs.com/mypjb/gloo-gateway:1.9.1
         imagePullPolicy: IfNotPresent
         name: gateway
         ports:

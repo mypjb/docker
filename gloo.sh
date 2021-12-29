@@ -40,6 +40,8 @@ else
 	echo "Use the following command to install"
 
 	echo "glooctl install (gateway or ingress or knative)"
+        
+	echo "OR use => kubectl apply -f gloo/gloo.yaml"
 
 	echo "Use the following command to pull the image in advance"
 	

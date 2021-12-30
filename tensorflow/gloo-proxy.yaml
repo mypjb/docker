@@ -1,0 +1,18 @@
+apiVersion: gateway.solo.io/v1
+kind: VirtualService
+metadata:
+  name: tensorflow-jupyter
+  namespace: gloo-system
+spec:
+  displayName: tensorflow-jupyter
+  virtualHost:
+    domains:
+    - jupyter.tensorflow.lass.net
+    routes:
+    - matchers:
+      - prefix: /
+      routeAction:
+        single:
+          upstream:
+            name: development-tensorflow-jupyter-8888
+            namespace: gloo-system

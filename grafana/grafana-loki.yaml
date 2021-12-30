@@ -1,3 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki
+  namespace: development
+spec:
+  selector:
+    app: grafana-loki
+  type: ClusterIP
+  ports:
+  - port: 3100
+    protocol: TCP
+    targetPort: http-loki
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

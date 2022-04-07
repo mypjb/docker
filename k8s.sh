@@ -4,9 +4,9 @@ set -o errexit
 echo install apt-key
 
 #k8s version
-k8s_version=v1.22.3
+k8s_version=v1.23.5
 
-image_url=registry.cn-beijing.aliyuncs.com/mypjb
+image_url=registry.cn-hangzhou.aliyuncs.com/google_containers
 
 packs=(cri-tools kubernetes-cni kubelet kubectl kubeadm)
 

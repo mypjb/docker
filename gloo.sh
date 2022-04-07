@@ -3,7 +3,7 @@ set -o errexit
 
 image_url=registry.cn-beijing.aliyuncs.com/mypjb
 
-image_version=1.9.1
+image_version=1.11.0
 
 image_commands[0]="ctr -n k8s.io image pull ${image_url}/gloo-certgen:${image_version} && ctr -n k8s.io image tag ${image_url}/gloo-certgen:${image_version} quay.io/solo-io/certgen:${image_version}"
 
@@ -25,7 +25,7 @@ if [ "${1}" == "pull" ];then
 else
 	echo "Download and install glooctl"
 	
-	curl -Lo glooctl https://github.com/solo-io/gloo/releases/download/v1.9.1/glooctl-linux-amd64
+	curl -Lo glooctl https://github.com/solo-io/gloo/releases/download/v${image_version}/glooctl-linux-amd64
 	
 	chmod 111 glooctl
 	

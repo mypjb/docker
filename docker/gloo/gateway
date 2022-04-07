@@ -1,1 +1,1 @@
-FROM quay.io/solo-io/gateway:1.9.1
+FROM quay.io/solo-io/gateway:1.11.0

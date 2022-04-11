@@ -5,9 +5,9 @@ bash_dir=$bash_dir/docker
 
 cd $bash_dir
 
-k8s_version=v1.22.3
-cilium_version=v1.10.5
-gloo_version=1.9.1
+k8s_version=v1.23.5
+cilium_version=v1.11.3
+gloo_version=1.11.0
 
 k8s_dir=k8s
 k8s_dashboard_dir=kubernetesui_dashboard
@@ -21,9 +21,9 @@ echo FROM k8s.gcr.io/kube-apiserver:${k8s_version} > ${k8s_dir}/kube-apiserver
 echo FROM k8s.gcr.io/kube-controller-manager:${k8s_version} > ${k8s_dir}/kube-controller-manager
 echo FROM k8s.gcr.io/kube-scheduler:${k8s_version} > ${k8s_dir}/kube-scheduler
 echo FROM k8s.gcr.io/kube-proxy:${k8s_version} > ${k8s_dir}/kube-proxy
-echo FROM k8s.gcr.io/pause:3.5 > ${k8s_dir}/pause
-echo FROM k8s.gcr.io/etcd:3.5.0-0 > ${k8s_dir}/etcd
-echo FROM k8s.gcr.io/coredns/coredns:v1.8.4 > ${k8s_dir}/coredns
+echo FROM k8s.gcr.io/pause:3.6 > ${k8s_dir}/pause
+echo FROM k8s.gcr.io/etcd:3.5.1-0 > ${k8s_dir}/etcd
+echo FROM k8s.gcr.io/coredns/coredns:v1.8.6 > ${k8s_dir}/coredns
 # k8s sig-storage
 echo FROM k8s.gcr.io/sig-storage/csi-snapshotter:v4.2.0 > ${k8s_dir}/csi-snapshotter
 echo FROM k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.3.0  > ${k8s_dir}/csi-node-driver-registrar

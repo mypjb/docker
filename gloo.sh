@@ -23,19 +23,26 @@ if [ "${1}" == "pull" ];then
 		bash -c "$image_command"
 	done	
 else
-	echo "Download and install glooctl"
+
+        gloo_install_file=glooctl
+
+        if [ -f "${gloo_install_file}" ];then
+		echo "gloo bash file exist"
+	else	
+		echo "Download and install glooctl"
 	
-	curl -Lo glooctl https://github.com/solo-io/gloo/releases/download/v${image_version}/glooctl-linux-amd64
+		curl -Lo ${gloo_install_file} https://github.com/solo-io/gloo/releases/download/v${image_version}/glooctl-linux-amd64
+	fi
+
+	chmod 111 ${gloo_install_file}
 	
-	chmod 111 glooctl
+	mv ${gloo_install_file} /usr/bin/
 	
-	mv glooctl  /usr/bin/
+	${gloo_install_file} version
 	
-	glooctl version
+	${gloo_install_file} completion bash > /etc/bash_completion.d/${gloo_install_file}
 	
-	glooctl completion bash > /etc/bash_completion.d/glooctl
-	
-	source <(glooctl completion bash)
+	source /etc/bash_completion.d/${gloo_install_file}
 	
 	echo "Use the following command to install"
 

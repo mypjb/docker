@@ -36508,7 +36508,7 @@ spec:
     spec:
       serviceAccountName: gateway
       containers:
-      - image: registry.cn-beijing.aliyuncs.com/mypjb/gloo-gateway
+      - image: registry.cn-beijing.aliyuncs.com/mypjb/gloo-gateway:1.11.0
         imagePullPolicy: IfNotPresent
         name: gateway
         ports:

@@ -6,7 +6,9 @@ dashboard_dir="dashboard"
 
 dashboard_certs_dir=${3:-"dashboard/certs"}
 
-dashboard_host=${2:-"ui.k8s.lass.net"}
+dashboard_default_host="ui.k8s.lass.net"
+
+dashboard_host=${2:-"${dashboard_default_host}"}
 
 image_commands[0]="ctr -n k8s.io image pull ${image_url}/kubernetesui-dashboard:v2.4.0 && ctr -n k8s.io image tag ${image_url}/kubernetesui-dashboard:v2.4.0 kubernetesui/dashboard:v2.4.0"
 
@@ -35,8 +37,11 @@ else
 		-newkey rsa:2048 -keyout $dashboard_certs_dir/tls.key \
 		-out $dashboard_certs_dir/tls.crt \
 		-subj "/CN=${dashboard_host}"
+
+		sed -i "s/${dashboard_default_host}/${dashboard_host}/g" $dashboard_dir/gloo-proxy.yaml
 	fi
 	
+
 	echo "Create kubernetes-dashboard-certs tls secret"
 	
 	kubectl create namespace kubernetes-dashboard
@@ -54,5 +59,4 @@ else
 		echo -e "$image_command\r\n"
 	done
 fi
-
 

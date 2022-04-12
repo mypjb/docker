@@ -99,7 +99,9 @@ mkdir -p /etc/containerd/certs.d/docker.io
 cat > /etc/containerd/certs.d/docker.io/hosts.toml << EOF
 server = "https://docker.mirrors.ustc.edu.cn"
 
-[host."https://0g0zcog9.mirror.aliyuncs.com"]
+[host."https://hub-mirror.c.163.com"]
+  capabilities = ["pull", "resolve"]
+[host."https://registry-1.docker.io"]
   capabilities = ["pull", "resolve"]
 EOF
 

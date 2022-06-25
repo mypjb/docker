@@ -4,4 +4,4 @@ metadata:
   name: glusterfs-cluster
 spec:
   ports:
-  - port: 19999
+  - port: 1

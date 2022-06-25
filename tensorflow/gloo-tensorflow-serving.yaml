@@ -1,0 +1,18 @@
+apiVersion: gateway.solo.io/v1
+kind: VirtualService
+metadata:
+  name: tensorflow-serving
+  namespace: gloo-system
+spec:
+  displayName: tensorflow-serving
+  virtualHost:
+    domains:
+    - serving.tensorflow.lass.net
+    routes:
+    - matchers:
+      - prefix: /
+      routeAction:
+        single:
+          upstream:
+            name: development-tensorflow-serving-8501
+            namespace: gloo-system

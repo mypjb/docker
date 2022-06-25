@@ -33,7 +33,7 @@ spec:
         runAsGroup: 0
       containers:
         - name: tensorflow-jupyter
-          image: tensorflow/tensorflow:2.7.0-jupyter
+          image: tensorflow/tensorflow:2.8.1-jupyter
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8888
@@ -46,7 +46,7 @@ spec:
           volumeMounts:
             - mountPath: /etc/test
               name: lass-pv
-              subPath: jupyter
+              subPath: tensorflow/jupyter
       volumes:
         - name: lass-pv
           persistentVolumeClaim:

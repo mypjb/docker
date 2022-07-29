@@ -28,5 +28,9 @@ kubectl completion bash > /etc/bash_completion.d/kubectl
 
 source /etc/bash_completion.d/kubectl
 
+crictl completion bash > /etc/bash_completion.d/crictl
+
+source /etc/bash_completion.d/crictl
+
 echo "After installation,you can run the following command to set kubectl "
 echo 'echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> /etc/profile.d/kubernetes.sh && source /etc/profile && echo $KUBECONFIG'

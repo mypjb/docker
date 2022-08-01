@@ -93,6 +93,7 @@ crictl config --set runtime-endpoint=${container_runtime_endpoint}
 crictl config --set image-endpoint=${container_runtime_endpoint}
 
 sed -i 's/config_path = ""/config_path = "\/etc\/containerd\/certs.d"/g'  /etc/containerd/config.toml
+sed -i 's/k8s.gcr.io/registry.cn-hangzhou.aliyuncs.com\/google_containers/g'  /etc/containerd/config.toml
 
 mkdir -p /etc/containerd/certs.d/docker.io
 

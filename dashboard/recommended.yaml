@@ -46,15 +46,15 @@ spec:
     k8s-app: kubernetes-dashboard
 
 ---
-
-apiVersion: v1
-kind: Secret
-metadata:
-  labels:
-    k8s-app: kubernetes-dashboard
-  name: kubernetes-dashboard-certs
-  namespace: kubernetes-dashboard
-type: Opaque
+#
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  labels:
+#    k8s-app: kubernetes-dashboard
+#  name: kubernetes-dashboard-certs
+#  namespace: kubernetes-dashboard
+#type: Opaque
 
 ---
 
@@ -192,7 +192,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: kubernetes-dashboard
-          image: kubernetesui/dashboard:v2.5.1
+          image: kubernetesui/dashboard:v2.6.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8443
@@ -202,6 +202,10 @@ spec:
             - --tls-key-file=tls.key
             - --authentication-mode=basic
             - --namespace=kubernetes-dashboard
+            # Uncomment the following line to manually specify Kubernetes API server Host
+            # If not specified, Dashboard will attempt to auto discover the API server and connect
+            # to it. Uncomment only if the default does not work.
+            # - --apiserver-host=http://my-address:port
           volumeMounts:
             - name: kubernetes-dashboard-certs
               mountPath: /certs
@@ -275,7 +279,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: dashboard-metrics-scraper
-          image: kubernetesui/metrics-scraper:v1.0.7
+          image: kubernetesui/metrics-scraper:v1.0.8
           ports:
             - containerPort: 8000
               protocol: TCP
@@ -304,4 +308,3 @@ spec:
       volumes:
         - name: tmp-volume
           emptyDir: {}
-

@@ -10,19 +10,7 @@ dashboard_default_host="ui.k8s.lass.net"
 
 dashboard_host=${2:-"${dashboard_default_host}"}
 
-image_commands[0]="ctr -n k8s.io image pull ${image_url}/kubernetesui-dashboard:v2.4.0 && ctr -n k8s.io image tag ${image_url}/kubernetesui-dashboard:v2.4.0 kubernetesui/dashboard:v2.4.0"
-
-image_commands[1]="ctr -n k8s.io image pull ${image_url}/kubernetesui-metrics-scraper:v1.0.7 && ctr -n k8s.io image tag ${image_url}/kubernetesui-metrics-scraper:v1.0.7 kubernetesui/metrics-scraper:v1.0.7"
-
-if [ "${1}" == "pull" ];then
-
-	echo "pull images"
-
-	for image_command in "${image_commands[@]}";do
-		bash -c "$image_command"
-	done
-
-elif [ "${1}" == "gloo" ];then
+if [ "${1}" == "gloo" ];then
 
 	sed -i "s/Bearer .*/Bearer $(kubectl -n kubernetes-dashboard get secrets $(kubectl -n kubernetes-dashboard get secrets | grep super-admin-token | cut -d ' ' -f 1) -o jsonpath='{.data.token}' | base64 --decode)/g" $dashboard_dir/gloo-proxy.yaml
 	

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -o errexit
 
-containerd_version=1.6.2
+containerd_version=1.6.6
 
 containerd_install_file=cri-containerd-cni-linux-amd64.tar.gz
 
@@ -97,7 +97,7 @@ sed -i 's/config_path = ""/config_path = "\/etc\/containerd\/certs.d"/g'  /etc/c
 mkdir -p /etc/containerd/certs.d/docker.io
 
 cat > /etc/containerd/certs.d/docker.io/hosts.toml << EOF
-server = "https://docker.mirrors.ustc.edu.cn"
+#server = "https://docker.mirrors.ustc.edu.cn"
 
 [host."https://hub-mirror.c.163.com"]
   capabilities = ["pull", "resolve"]

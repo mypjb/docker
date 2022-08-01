@@ -55,5 +55,9 @@ Install [Kubernetes](https://kubernetes.io) [dashboard](https://github.com/kuber
 
 ```shell
 ./dashboard.sh
+#use default user manage
+kubectl apply -f dashboard/userSetting.yaml
+#use gateway
+./dashboard.sh gloo
 ```
 

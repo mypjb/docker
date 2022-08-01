@@ -37,3 +37,13 @@ roleRef:
   name: super-admin
   apiGroup: rbac.authorization.k8s.io
 
+---
+# Create account token
+apiVersion: v1
+kind: Secret
+metadata:
+  name: super-admin-token
+  namespace: kubernetes-dashboard
+  annotations:
+    kubernetes.io/service-account.name: super-admin
+type: kubernetes.io/service-account-token

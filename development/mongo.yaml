@@ -1,0 +1,82 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongo.user
+  namespace: development
+type: Opaque
+data:
+  username: root
+  password: Aa123456
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mongo
+  name: mongo
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: mongo
+          image: mongo:5.0.10
+          imagePullPolicy: IfNotPresent
+          args:
+            - --config /etc/mongo/mongod.conf
+          ports:
+            - containerPort: 27017
+              name: tcp
+              protocol: TCP
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom: 
+                secretKeyRef:
+                  name: mongo.user
+                  key: username
+                  optional: false
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: mongo.user
+                  key: password
+                  optional: false
+          volumeMounts:
+            - mountPath: /etc/mongo
+              name: pvc
+              subPath: mongo/config
+          volumeMounts:
+            - mountPath: /data/db
+              name: pvc
+              subPath: mongo/data
+      volumes:
+        - name: pvc
+          persistentVolumeClaim:
+            claimName: hhd-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-db-lass-net
+  namespace: development
+spec:
+  ports:
+    - port: 27017
+      name: tcp 
+      protocol: TCP
+      targetPort: 27017
+  selector:
+    app: mongo
+  sessionAffinity: None
+  type: ClusterIP

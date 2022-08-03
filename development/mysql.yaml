@@ -1,0 +1,75 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql.user
+  namespace: development
+type: Opaque
+data:
+  username: root
+  password: Aa123456
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql
+  name: mysql
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: mysql
+          image: mysql:8.0.30 
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+              name: tcp
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: mysql.user
+                  key: password
+                  optional: false
+          volumeMounts:
+            - mountPath: /etc/mysql
+              name: pvc
+              subPath: mysql/config
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: pvc
+              subPath: mysql/data
+      volumes:
+        - name: pvc
+          persistentVolumeClaim:
+            claimName: hhd-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-db-lass-net
+  namespace: development
+spec:
+  ports:
+    - port: 3306
+      name: tcp 
+      protocol: TCP
+      targetPort: 3306
+  selector:
+    app: mysql
+  sessionAffinity: None
+  type: ClusterIP

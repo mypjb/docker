@@ -4,14 +4,6 @@ metadata:
   name: glusterfs-cluster
 subsets:
 - addresses:
-  - ip: 10.191.34.23 
-  ports:
-  - port: 1
-- addresses:
-  - ip: 10.191.34.24 
-  ports:
-  - port: 1
-- addresses:
-  - ip: 10.191.34.25 
+  - ip: 192.168.1.101
   ports:
   - port: 1

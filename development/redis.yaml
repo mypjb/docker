@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redis
+  name: redis
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: redis
+          image: redis:7.0.4-alpine
+          imagePullPolicy: IfNotPresent
+          args:
+            - redis-server /usr/local/etc/redis/redis.conf
+          ports:
+            - containerPort: 6379
+              name: tcp
+              protocol: TCP
+          resources:
+          volumeMounts:
+            - mountPath: /usr/local/etc/redis
+              name: pvc
+              subPath: redis
+      volumes:
+        - name: pvc
+          persistentVolumeClaim:
+            claimName: hhd-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-cache-lass-net
+  namespace: development
+spec:
+  ports:
+    - port: 6379
+      name: tcp 
+      protocol: TCP
+      targetPort: 6379
+  selector:
+    app: redis
+  sessionAffinity: None
+  type: ClusterIP

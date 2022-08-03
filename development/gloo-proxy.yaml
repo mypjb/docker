@@ -1,0 +1,18 @@
+apiVersion: gateway.solo.io/v1
+kind: VirtualService
+metadata:
+  name: nuget
+  namespace: gloo-system
+spec:
+  displayName: nuget
+  virtualHost:
+    domains:
+    - nuget.lass.net
+    routes:
+    - matchers:
+      - prefix: /
+      routeAction:
+        single:
+          upstream:
+            name: development-grafana-3000
+            namespace: gloo-system

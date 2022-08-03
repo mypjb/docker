@@ -4,7 +4,7 @@ metadata:
   name: pv001-hhd
 spec:
   capacity:
-    storage: 900Gi
+    storage: 291Gi
   volumeMode: Filesystem 
   accessModes:
     - ReadWriteMany
@@ -14,5 +14,5 @@ spec:
     # Try running glusterfs using a container
     endpoints: glusterfs-cluster
     endpointsNamespace: default
-    path: gv01-hhd
+    path: gv0
     readOnly: false

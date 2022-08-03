@@ -22,7 +22,8 @@ spec:
           image: redis:7.0.4-alpine
           imagePullPolicy: IfNotPresent
           args:
-            - redis-server /usr/local/etc/redis/redis.conf
+            - redis-server 
+            - /usr/local/etc/redis/redis.conf
           ports:
             - containerPort: 6379
               name: tcp
@@ -40,7 +41,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-cache-lass-net
+  name: redis
   namespace: development
 spec:
   ports:

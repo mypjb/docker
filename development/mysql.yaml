@@ -6,8 +6,8 @@ metadata:
   namespace: development
 type: Opaque
 data:
-  username: root
-  password: Aa123456
+  username: cm9vdA==
+  password: QWExMjM0NTY=
 
 ---
 
@@ -46,10 +46,9 @@ spec:
                   key: password
                   optional: false
           volumeMounts:
-            - mountPath: /etc/mysql
+            - mountPath: /etc/mysql/conf.d
               name: pvc
               subPath: mysql/config
-          volumeMounts:
             - mountPath: /var/lib/mysql
               name: pvc
               subPath: mysql/data
@@ -61,7 +60,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-db-lass-net
+  name: mysql
   namespace: development
 spec:
   ports:

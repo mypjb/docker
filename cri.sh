@@ -1,7 +1,7 @@
 #!/bin/bash
 set -o errexit
 
-containerd_version=1.6.6
+containerd_version=1.6.8
 
 containerd_install_file=cri-containerd-cni-linux-amd64.tar.gz
 

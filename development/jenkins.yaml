@@ -19,7 +19,7 @@ spec:
         runAsGroup: 0
       containers:
         - name: jenkins
-          image: jenkinsci/blueocean:1.25.5
+          image: jenkins/jenkins:2.362
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

@@ -1,3 +1,18 @@
+---
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis.config
+  namespace: development
+data:
+  redis.conf: |
+    bind 0.0.0.0
+    loglevel verbose
+    databases 16
+    requirepass Aa123456
+    maxmemory 256mb
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,12 +46,14 @@ spec:
           resources:
           volumeMounts:
             - mountPath: /usr/local/etc/redis
-              name: pvc
-              subPath: redis
+              name: config
       volumes:
         - name: pvc
           persistentVolumeClaim:
             claimName: hhd-pvc
+        - name: config
+          configMap:
+            name: redis.config
 ---
 apiVersion: v1
 kind: Service

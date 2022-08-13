@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: buildkit
+  name: buildkit
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: buildkit
+  template:
+    metadata:
+      labels:
+        app: buildkit
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: buildkit
+          image: moby/buildkit:v0.10.3
+          imagePullPolicy: IfNotPresent
+          args: 
+            - /bin/bash
+            #          resources:
+            #          volumeMounts:
+            #            - mountPath: /usr/local/etc/buildkit
+            #              name: pvc
+            #              subPath: buildkit
+            #      volumes:
+            #        - name: pvc
+            #          persistentVolumeClaim:
+            #            claimName: hhd-pvc

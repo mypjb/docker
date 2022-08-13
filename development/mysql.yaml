@@ -1,5 +1,25 @@
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql.config
+  namespace: development
+data:
+  my.cnf: |
+    [client]
+    default-character-set=utf8mb4
+     
+    [mysqld]
+    port = 3306
+    max_connections=20
+    character-set-server=utf8mb4
+    default-storage-engine=INNODB
+    skip-name-resolve
+    
+    [mysql]
+    default-character-set=utf8mb4
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: mysql.user
@@ -47,8 +67,7 @@ spec:
                   optional: false
           volumeMounts:
             - mountPath: /etc/mysql/conf.d
-              name: pvc
-              subPath: mysql/config
+              name: config
             - mountPath: /var/lib/mysql
               name: pvc
               subPath: mysql/data
@@ -56,6 +75,9 @@ spec:
         - name: pvc
           persistentVolumeClaim:
             claimName: hhd-pvc
+        - name: config
+          configMap:
+            name: mysql.config
 ---
 apiVersion: v1
 kind: Service

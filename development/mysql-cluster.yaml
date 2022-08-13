@@ -1,0 +1,569 @@
+---
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-cluster-config
+  namespace: development
+data:
+  manager: |
+    [ndbd default]
+    NoOfReplicas=2
+    DataMemory=80M
+    IndexMemory=18M
+    
+    
+    [ndb_mgmd]
+    NodeId=1
+    hostname=mysql-cluster-manager01.development.svc.cluster.local
+    datadir=/var/lib/mysql
+    PortNumber=1186
+    
+    [ndbd]
+    NodeId=2
+    hostname=mysql-cluster-data01.development.svc.cluster.local
+    datadir=/var/lib/mysql
+    
+    [ndbd]
+    NodeId=3
+    hostname=mysql-cluster-data02.development.svc.cluster.local
+    datadir=/var/lib/mysql
+
+    [ndbd]
+    NodeId=4
+    hostname=mysql-cluster-data03.development.svc.cluster.local
+    datadir=/var/lib/mysql
+
+    [ndbd]
+    NodeId=5
+    hostname=mysql-cluster-data04.development.svc.cluster.local
+    datadir=/var/lib/mysql
+    
+    [mysqld]
+    NodeId=6
+    hostname=mysql-cluster-service01.development.svc.cluster.local
+    [MYSQLD]
+    [MYSQLD]
+  node: |
+    [client]
+    default-character-set=utf8mb4
+
+    [mysqld]
+    ndbcluster
+    ndb-connectstring=mysql-cluster-manager01.development.svc.cluster.local
+    user=mysql
+    max_connections=20
+    character-set-server=utf8mb4
+    skip-name-resolve
+
+    [mysql_cluster]
+    ndb-connectstring=mysql-cluster-manager01.development.svc.cluster.local
+    
+    [mysql]
+    default-character-set=utf8mb4
+---
+# Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql.user
+  namespace: development
+type: Opaque
+data:
+  username: cm9vdA==
+  password: QWExMjM0NTY=
+
+---
+# development mysql-cluster-manager01
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql-cluster-manager01
+  name: mysql-cluster-manager01
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: mysql-cluster-manager01
+  template:
+    metadata:
+      labels:
+        app: mysql-cluster-manager01
+    spec:
+      hostAliases:
+        - ip: "127.0.0.1"
+          hostnames:
+            - "mysql-cluster-manager01.development.svc.cluster.local"
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: mysql-cluster-manager01
+          image: mysql/mysql-cluster:8.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - ndb_mgmd
+          ports:
+            - containerPort: 1186
+              name: manage-port
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: mysql.user
+                  key: password
+                  optional: false
+          volumeMounts:
+            - mountPath: /etc/mysql-cluster.cnf
+              name: cluster-master-config
+              subPath: mysql-cluster.cnf
+              readOnly: true
+            - mountPath: /etc/my.cnf
+              name: cluster-node-config
+              subPath: my.cnf
+              readOnly: true
+            - mountPath: /var/lib/mysql
+              name: pvc
+              subPath: mysql/manager01/data
+      volumes:
+        - name: pvc
+          persistentVolumeClaim:
+            claimName: hhd-pvc
+        - name: cluster-master-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: manager
+                path: mysql-cluster.cnf
+        - name: cluster-node-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: node
+                path: my.cnf
+---
+# development mysql-cluster-service01
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql-cluster-service01
+  name: mysql-cluster-service01
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: mysql-cluster-service01
+  template:
+    metadata:
+      labels:
+        app: mysql-cluster-service01
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: mysql-cluster-service01
+          image: mysql/mysql-cluster:8.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - mysqld
+          ports:
+            - containerPort: 3306
+              name: tcp
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: mysql.user
+                  key: password
+                  optional: false
+          volumeMounts:
+            - mountPath: /etc/mysql-cluster.cnf
+              name: cluster-master-config
+              subPath: mysql-cluster.cnf
+              readOnly: true
+            - mountPath: /etc/my.cnf
+              name: cluster-node-config
+              subPath: my.cnf
+              readOnly: true
+            - mountPath: /rvar/lib/mysql
+              name: pvc
+              subPath: mysql/service01/data
+      volumes:
+        - name: pvc
+          persistentVolumeClaim:
+            claimName: hhd-pvc
+        - name: cluster-master-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: manager
+                path: mysql-cluster.cnf
+        - name: cluster-node-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: node
+                path: my.cnf
+---
+# development mysql-cluster-data01
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql-cluster-data01
+  name: mysql-cluster-data01
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: mysql-cluster-data01
+  template:
+    metadata:
+      labels:
+        app: mysql-cluster-data01
+    spec:
+      hostAliases:
+        - ip: "127.0.0.1"
+          hostnames:
+            - "mysql-cluster-data01.development.svc.cluster.local"
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: mysql-cluster-data01
+          image: mysql/mysql-cluster:8.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - ndbd
+          ports:
+            - containerPort: 3306
+              name: tcp
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: mysql.user
+                  key: password
+                  optional: false
+          volumeMounts:
+            - mountPath: /etc/mysql-cluster.cnf
+              name: cluster-master-config
+              subPath: mysql-cluster.cnf
+              readOnly: true
+            - mountPath: /etc/my.cnf
+              name: cluster-node-config
+              subPath: my.cnf
+              readOnly: true
+            - mountPath: /var/lib/mysql
+              name: pvc
+              subPath: mysql/data01/data
+      volumes:
+        - name: pvc
+          persistentVolumeClaim:
+            claimName: hhd-pvc
+        - name: cluster-master-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: manager
+                path: mysql-cluster.cnf
+        - name: cluster-node-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: node
+                path: my.cnf
+---
+# development mysql-cluster-data02
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql-cluster-data02
+  name: mysql-cluster-data02
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: mysql-cluster-data02
+  template:
+    metadata:
+      labels:
+        app: mysql-cluster-data02
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: mysql-cluster-data02
+          image: mysql/mysql-cluster:8.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - ndbd
+          ports:
+            - containerPort: 3306
+              name: tcp
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: mysql.user
+                  key: password
+                  optional: false
+          volumeMounts:
+            - mountPath: /etc/mysql-cluster.cnf
+              name: cluster-master-config
+              subPath: mysql-cluster.cnf
+              readOnly: true
+            - mountPath: /etc/my.cnf
+              name: cluster-node-config
+              subPath: my.cnf
+              readOnly: true
+            - mountPath: /var/lib/mysql
+              name: pvc
+              subPath: mysql/data02/data
+      volumes:
+        - name: pvc
+          persistentVolumeClaim:
+            claimName: hhd-pvc
+        - name: cluster-master-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: manager
+                path: mysql-cluster.cnf
+        - name: cluster-node-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: node
+                path: my.cnf
+---
+# development mysql-cluster-data03
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql-cluster-data03
+  name: mysql-cluster-data03
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: mysql-cluster-data03
+  template:
+    metadata:
+      labels:
+        app: mysql-cluster-data03
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: mysql-cluster-data03
+          image: mysql/mysql-cluster:8.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - ndbd
+          ports:
+            - containerPort: 3306
+              name: tcp
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: mysql.user
+                  key: password
+                  optional: false
+          volumeMounts:
+            - mountPath: /etc/mysql-cluster.cnf
+              name: cluster-master-config
+              subPath: mysql-cluster.cnf
+              readOnly: true
+            - mountPath: /etc/my.cnf
+              name: cluster-node-config
+              subPath: my.cnf
+              readOnly: true
+            - mountPath: /var/lib/mysql
+              name: pvc
+              subPath: mysql/data03/data
+      volumes:
+        - name: pvc
+          persistentVolumeClaim:
+            claimName: hhd-pvc
+        - name: cluster-master-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: manager
+                path: mysql-cluster.cnf
+        - name: cluster-node-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: node
+                path: my.cnf
+---
+# development mysql-cluster-data04
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql-cluster-data04
+  name: mysql-cluster-data04
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: mysql-cluster-data04
+  template:
+    metadata:
+      labels:
+        app: mysql-cluster-data04
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: mysql-cluster-data04
+          image: mysql/mysql-cluster:8.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - ndbd
+          ports:
+            - containerPort: 3306
+              name: tcp
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: mysql.user
+                  key: password
+                  optional: false
+          volumeMounts:
+            - mountPath: /etc/mysql-cluster.cnf
+              name: cluster-master-config
+              subPath: mysql-cluster.cnf
+              readOnly: true
+            - mountPath: /etc/my.cnf
+              name: cluster-node-config
+              subPath: my.cnf
+              readOnly: true
+            - mountPath: /var/lib/mysql
+              name: pvc
+              subPath: mysql/data04/data
+      volumes:
+        - name: pvc
+          persistentVolumeClaim:
+            claimName: hhd-pvc
+        - name: cluster-master-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: manager
+                path: mysql-cluster.cnf
+        - name: cluster-node-config
+          configMap:
+            name: mysql-cluster-config
+            items:
+              - key: node
+                path: my.cnf
+---
+# service mysql-cluster-manager01
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-cluster-manager01
+  namespace: development
+spec:
+  ports:
+    - port: 1186
+      name: manage-port 
+      protocol: TCP
+      targetPort: manage-port
+  selector:
+    app: mysql-cluster-manager01
+  sessionAffinity: None
+  type: ClusterIP
+---
+# service mysql-cluster-service01
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-cluster-service01
+  namespace: development
+spec:
+  ports:
+    - port: 3306
+      name: tcp 
+      protocol: TCP
+      targetPort: 3306
+  selector:
+    app: mysql-cluster-service01
+  sessionAffinity: None
+  type: ClusterIP
+---
+# service mysql-cluster-data01
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-cluster-data01
+  namespace: development
+spec:
+  ports:
+    - port: 1
+  selector:
+    app: mysql-cluster-data01
+  sessionAffinity: None
+  type: ClusterIP
+---
+# service mysql-cluster-data02
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-cluster-data02
+  namespace: development
+spec:
+  ports:
+    - port: 1
+  selector:
+    app: mysql-cluster-data02
+  sessionAffinity: None
+  type: ClusterIP
+---
+# service mysql-cluster-data03
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-cluster-data03
+  namespace: development
+spec:
+  ports:
+    - port: 1
+  selector:
+    app: mysql-cluster-data03
+  sessionAffinity: None
+  type: ClusterIP
+---
+# service mysql-cluster-data04
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-cluster-data04
+  namespace: development
+spec:
+  ports:
+    - port: 1
+  selector:
+    app: mysql-cluster-data04
+  sessionAffinity: None
+  type: ClusterIP

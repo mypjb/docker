@@ -1,4 +1,31 @@
 ---
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo.config
+  namespace: development
+data:
+  mongod.conf: |
+    systemLog:
+       destination: file
+       path: "/var/log/mongodb/mongod.log"
+       logAppend: true
+    storage:
+       dbPath: /data/db
+       journal:
+          enabled: true
+    # Using a daemon(fork) in a container causes teh container to exit
+    #processManagement:
+    #   fork: true
+    net:
+       bindIp: 0.0.0.0
+       port: 27017
+    setParameter:
+       enableLocalhostAuthBypass: true
+    security:
+        authorization: enabled
+---
 apiVersion: v1
 kind: Secret
 metadata:
@@ -55,15 +82,18 @@ spec:
                   optional: false
           volumeMounts:
             - mountPath: /etc/mongo
-              name: pvc
-              subPath: mongo/config
-            - mountPath: /data/db
+              name: config
+            - mountPath: /data
               name: pvc
               subPath: mongo/data
       volumes:
         - name: pvc
           persistentVolumeClaim:
             claimName: hhd-pvc
+        - name: config
+          configMap:
+            name: mongo.config
+
 ---
 apiVersion: v1
 kind: Service

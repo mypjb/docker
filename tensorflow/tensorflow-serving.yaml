@@ -30,7 +30,7 @@ spec:
         runAsGroup: 0
       containers:
         - name: tensorflow-serving
-          image: tensorflow/serving:2.8.0
+          image: tensorflow/serving:2.9.1
           imagePullPolicy: IfNotPresent
           args:
             - --model_config_file=/models/models.config

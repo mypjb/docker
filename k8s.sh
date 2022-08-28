@@ -1,11 +1,13 @@
 #!/bin/bash
 set -o errexit
 
+export KUBE_PROXY_MODE=ipvs
+
 echo install apt-key
 
 image_url=registry.cn-hangzhou.aliyuncs.com/google_containers
 
-apt install -y gnupg curl bash-completion
+apt install -y gnupg curl bash-completion ipset ipvsadm
 
 curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
 apt-key add k8s/apt-key.gpg

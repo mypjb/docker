@@ -53,10 +53,20 @@ echo "setting k8s container load module"
 cat <<EOF | tee /etc/modules-load.d/containerd.conf
 overlay
 br_netfilter
+ip_vs
+ip_vs_rr
+ip_vs_wrr
+ip_vs_sh
+nf_conntrack
 EOF
 
 modprobe overlay
 modprobe br_netfilter
+modprobe -- ip_vs
+modprobe -- ip_vs_rr
+modprobe -- ip_vs_wrr
+modprobe -- ip_vs_sh
+modprobe -- nf_conntrack
 
 echo "setting k8s container network"
 

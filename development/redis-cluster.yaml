@@ -1,0 +1,108 @@
+---
+# redis cluster config
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-cluster-config
+  namespace: development
+data:
+  redis.conf: |
+    port 6379
+    protected-mode yes
+    cluster-enabled yes
+    cluster-config-file nodes-16379.conf
+    cluster-node-timeout 3000
+    cluster-announce-port 6379
+    cluster-announce-bus-port 16379
+    appendonly yes
+    appendfsync everysec
+    no-appendfsync-on-rewrite no
+    auto-aof-rewrite-percentage 100
+    auto-aof-rewrite-min-size 64mb
+    masterauth redis.cluster
+    requirepass Ouchn.Nerc_5751
+    #databases 256
+    dir /data
+    maxclients 10000
+---
+# redis cluster service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-cluster
+  namespace: development
+spec:
+  type: NodePort
+  ports:
+    - name: redis-6379
+      port: 6379
+      protocol: TCP
+      targetPort: 6379
+  selector:
+    app: redis-cluster
+---
+# redis statefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-cluster
+  namespace: development
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: redis-cluster
+  serviceName: redis-cluster
+  template:
+    metadata:
+      labels:
+        app: redis-cluster
+    spec:
+      imagePullSecrets:
+        - name: harbor
+      containers:
+        - name: redis-cluster
+          image: redis:7.0.2-bullseye
+          imagePullPolicy: IfNotPresent
+          command: ["redis-server"]
+          args:
+            - /usr/local/etc/redis/redis.conf
+            - --cluster-announce-ip
+            - "$(POD_IP)"
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          ports:
+            - name: redis-6379
+              containerPort: 6379
+              protocol: TCP
+            - name: redis-16379
+              containerPort: 16379
+              protocol: TCP
+          volumeMounts:
+            - name: conf
+              mountPath: /usr/local/etc/redis/
+            - name: data
+              mountPath: /data
+              subPathExpr: development/redis/data/$(POD_NAME)
+      volumes:
+        - name: conf
+          configMap:
+            name: redis-cluster-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: hhd-pvc
+              #  volumeClaimTemplates:
+              #    - metadata:
+              #        name: data
+              #      spec:
+              #        accessModes: ["ReadWriteOnce"]
+              #        resources:
+              #          requests:
+              #            storage: 1Gi

@@ -1,0 +1,5 @@
+spec:
+  sslConfig:
+    secretRef:
+      name: rook-ceph-certs
+      namespace: rook-ceph

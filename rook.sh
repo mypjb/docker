@@ -1,30 +1,51 @@
 #!/bin/bash
 set -o errexit
 
-image_url=registry.cn-beijing.aliyuncs.com/mypjb
-ctr_ns=k8s.io
-k8s_ns=k8s.gcr.io
+rook_namespace=${4:-"rook-ceph"}
 
-image_commands[0]="ctr -n ${ctr_ns} image pull ${image_url}/sig-storage-csi-snapshotter:v4.2.0 && ctr -n ${ctr_ns} image tag  ${image_url}/sig-storage-csi-snapshotter:v4.2.0 ${k8s_ns}/sig-storage/csi-snapshotter:v4.2.0"
+gloo_upstream=${5:-"rook-ceph-rook-ceph-mgr-dashboard-8443"}
 
-image_commands[1]="ctr -n ${ctr_ns} image pull ${image_url}/sig-storage-csi-node-driver-registrar:v2.3.0 && ctr -n ${ctr_ns} image tag  ${image_url}/sig-storage-csi-node-driver-registrar:v2.3.0 ${k8s_ns}/sig-storage/csi-node-driver-registrar:v2.3.0"
+rook_dir="rook"
 
-image_commands[2]="ctr -n ${ctr_ns} image pull ${image_url}/sig-storage-csi-resizer:v1.3.0 && ctr -n ${ctr_ns} image tag ${image_url}/sig-storage-csi-resizer:v1.3.0 ${k8s_ns}/sig-storage/csi-resizer:v1.3.0"
+rook_certs_dir=${3:-"rook/certs"}
 
-image_commands[3]="ctr -n ${ctr_ns} image pull ${image_url}/sig-storage-csi-provisioner:v3.0.0 && ctr -n ${ctr_ns} image tag ${image_url}/sig-storage-csi-provisioner:v3.0.0 ${k8s_ns}/sig-storage/csi-provisioner:v3.0.0"
+rook_default_host="ceph.rook.lass.net"
 
-image_commands[4]="ctr -n ${ctr_ns} image pull ${image_url}/sig-storage-csi-attacher:v3.3.0 && ctr -n ${ctr_ns} image tag  ${image_url}/sig-storage-csi-attacher:v3.3.0 ${k8s_ns}/sig-storage/csi-attacher:v3.3.0"
+rook_host=${2:-"${rook_default_host}"}
 
-image_commands[5]="ctr -n ${ctr_ns} image pull ${image_url}/ceph:v16.2.6 && ctr -n ${ctr_ns} image tag  ${image_url}/ceph:v16.2.6 quay.io/ceph/ceph:v16.2.6"
+if [ "${1}" == "ssl" ];then
 
-image_commands[6]="ctr -n ${ctr_ns} image pull ${image_url}/cephcsi:v3.4.0 && ctr -n ${ctr_ns} image tag  ${image_url}/cephcsi:v3.4.0 quay.io/cephcsi/cephcsi:v3.4.0"
+	mkdir -p $rook_certs_dir
 
-if [ "${1}" == "pull" ];then
+	if [ ! -f "${rook_certs_dir}/tls.key" ];then
+		echo -e " $rook_certs_dir Automatic certificate generation was not detected"
+		openssl req -x509 -nodes -days 365 \
+		-newkey rsa:2048 -keyout $rook_certs_dir/tls.key \
+		-out $rook_certs_dir/tls.crt \
+		-subj "/CN=${rook_host}"
 
-	echo "pull images"
+		sed -i "s/${rook_default_host}/${rook_host}/g" $rook_dir/gloo-proxy.yaml
+	fi
 	
-	for image_command in "${image_commands[@]}";do
-		bash -c "$image_command"
-	done	
-fi
 
+	echo "Create rook-certs tls secret"
+
+	kubectl -n $rook_namespace create \
+	secret tls ${rook_namespace}-certs \
+	--key $(pwd)/$rook_certs_dir/tls.key \
+	--cert $(pwd)/$rook_certs_dir/tls.crt
+
+elif [ "${1}" == "gloo" ];then
+	cat > ${rook_dir}/gloo-upstream.yaml << EOF
+spec:
+  sslConfig:
+    secretRef:
+      name: ${rook_namespace}-certs
+      namespace: ${rook_namespace}
+EOF
+	kubectl -n gloo-system patch upstream $gloo_upstream --type merge --patch-file ${rook_dir}/gloo-upstream.yaml
+	kubectl apply -f ${rook_dir}/gloo-proxy.yaml
+else
+ 
+	kubectl apply -f $rook_dir/crds.yaml -f $rook_dir/common.yaml -f $rook_dir/operator.yaml -f $rook_dir/cluster.yaml
+fi

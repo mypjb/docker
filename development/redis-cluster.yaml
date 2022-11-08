@@ -90,19 +90,17 @@ spec:
               mountPath: /usr/local/etc/redis/
             - name: data
               mountPath: /data
-              subPathExpr: development/redis/data/$(POD_NAME)
       volumes:
         - name: conf
           configMap:
             name: redis-cluster-config
         - name: data
-          persistentVolumeClaim:
-            claimName: hhd-pvc
-              #  volumeClaimTemplates:
-              #    - metadata:
-              #        name: data
-              #      spec:
-              #        accessModes: ["ReadWriteOnce"]
-              #        resources:
-              #          requests:
-              #            storage: 1Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "rook-ceph-block"
+        resources:
+          requests:
+            storage: 1Gi

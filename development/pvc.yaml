@@ -4,16 +4,16 @@ kind: Namespace
 metadata:
   name: development
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: hhd-pvc
-  namespace: development
-spec:
-  volumeMode: Filesystem
-  accessModes:
-   - ReadWriteMany
-  resources:
-    requests:
-      storage: 291Gi
-  storageClassName: ""
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: pvc
+#  namespace: development
+#spec:
+#  volumeMode: Filesystem
+#  accessModes:
+#   - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 10Gi
+#  storageClassName: "rook-ceph-block"

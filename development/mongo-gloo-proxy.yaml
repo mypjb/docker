@@ -1,0 +1,17 @@
+apiVersion: gateway.solo.io/v1
+kind: Gateway
+metadata:
+  name: mongo
+  namespace: gloo-system
+spec:
+  bindAddress: '::'
+  bindPort: 27017
+  tcpGateway:
+    tcpHosts:
+    - name: mongo
+      destination:
+        single:
+          upstream:
+            name: development-mongo-27017
+            namespace: gloo-system
+  useProxyProto: false

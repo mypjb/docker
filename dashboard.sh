@@ -12,6 +12,8 @@ dashboard_host=${2:-"${dashboard_default_host}"}
 
 if [ "${1}" == "gloo" ];then
 
+	kubectl apply -f $dashboard_dir/userSetting.yaml
+
 	sed -i "s/Bearer .*/Bearer $(kubectl -n kubernetes-dashboard get secrets $(kubectl -n kubernetes-dashboard get secrets | grep super-admin-token | cut -d ' ' -f 1) -o jsonpath='{.data.token}' | base64 --decode)/g" $dashboard_dir/gloo-proxy.yaml
 	
 	kubectl apply -f $dashboard_dir/gloo-proxy.yaml

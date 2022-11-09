@@ -27,8 +27,7 @@ spec:
             #          volumeMounts:
             #            - mountPath: /usr/local/etc/buildkit
             #              name: pvc
-            #              subPath: buildkit
             #      volumes:
             #        - name: pvc
             #          persistentVolumeClaim:
-            #            claimName: hhd-pvc
+            #            claimName: buildkit

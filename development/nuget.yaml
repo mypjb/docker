@@ -51,6 +51,9 @@ spec:
         - name: nuget
           image: loicsharma/baget:latest
           imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 300Mi
           ports:
             - containerPort: 80
               name: http

@@ -74,6 +74,9 @@ spec:
         - name: mongo
           image: mongo:5.0.10
           imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 300Mi
           args:
             - --config 
             - /etc/mongo/mongod.conf

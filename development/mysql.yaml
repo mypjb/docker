@@ -68,6 +68,9 @@ spec:
         - name: mysql
           image: mysql:8.0.30 
           imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 400Mi
           ports:
             - containerPort: 3306
               name: tcp

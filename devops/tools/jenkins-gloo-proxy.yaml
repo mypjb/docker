@@ -14,5 +14,5 @@ spec:
       routeAction:
         single:
           upstream:
-            name: development-jenkins-8080
+            name: devops-tools-jenkins-8080
             namespace: gloo-system

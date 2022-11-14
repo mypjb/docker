@@ -25,7 +25,7 @@ data:
      
     [mysqld]
     port = 3306
-    max_connections=20
+    max_connections=1024
     character-set-server=utf8mb4
     default-storage-engine=INNODB
     skip-name-resolve
@@ -70,7 +70,7 @@ spec:
           imagePullPolicy: IfNotPresent
           resources:
             limits:
-              memory: 400Mi
+              memory: 500Mi
           ports:
             - containerPort: 3306
               name: tcp

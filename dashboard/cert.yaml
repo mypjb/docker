@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kubernetes-dashboard-certs
+  namespace: kubernetes-dashboard
+spec:
+  secretName: kubernetes-dashboard-certs
+  duration: 8760h
+  renewBefore: 720h
+  commonName: lass
+  dnsNames:
+    - 'ui.k8s.lass.net'
+  privateKey:
+    algorithm: Ed25519    
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io

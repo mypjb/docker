@@ -4,11 +4,13 @@ set -o errexit
 
 image_url=docker.io/cilium
 
-image_version=v1.11.7
+#image_version=v1.11.7
 	
 if [ "${1}" == "install" ];then
 
-	cilium install --version ${image_version} --agent-image ${image_url}/cilium:${image_version}  --operator-image ${image_url}/operator-generic:${image_version}
+	cilium install
+
+	#cilium install --version ${image_version} --agent-image ${image_url}/cilium:${image_version}  --operator-image ${image_url}/operator-generic:${image_version}
 
 else
 	cilium_install_file=cilium-linux-amd64.tar.gz

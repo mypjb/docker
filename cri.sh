@@ -1,7 +1,7 @@
 #!/bin/bash
 set -o errexit
 
-containerd_version=1.7.2
+containerd_version=1.7.11
 
 containerd_install_file=cri-containerd-cni-linux-amd64.tar.gz
 
@@ -9,33 +9,39 @@ container_runtime_endpoint=unix:///run/containerd/containerd.sock
 
 apt-get install -y libseccomp2 curl
 
-if [ -f "${containerd_install_file}" ];then
+if [ "${1}" == "install" ];then
 
-	echo "containerd package file exit"
-	
-else
+  if [ -f "${containerd_install_file}" ];then
+  
+  	echo "containerd package file exit"
+  	
+  else
+  
+  	echo "download containerd install package"
+  
+  	curl -L -o $containerd_install_file https://github.com/containerd/containerd/releases/download/v${containerd_version}/cri-containerd-cni-${containerd_version}-linux-amd64.tar.gz
+  
+  fi
 
-	echo "download containerd install package"
+  echo "decompression and install containerd"
 
-	curl -L -o $containerd_install_file https://github.com/containerd/containerd/releases/download/v${containerd_version}/cri-containerd-cni-${containerd_version}-linux-amd64.tar.gz
+  tar --no-overwrite-dir -C / -xzf $containerd_install_file
+  
+  echo -e "rm install package ${containerd_install_file}"
+  
+  rm -rf $containerd_install_file
+  
+  echo "start-up containerd";
+  
+  systemctl enable containerd
+  
+  systemctl daemon-reload
+  
+  systemctl start containerd
+
+  return;
 
 fi
-
-echo "decompression and install containerd"
-
-tar --no-overwrite-dir -C / -xzf $containerd_install_file
-
-echo -e "rm install package ${containerd_install_file}"
-
-rm -rf $containerd_install_file
-
-echo "start-up containerd";
-
-systemctl enable containerd
-
-systemctl daemon-reload
-
-systemctl start containerd
 
 mkdir -p /etc/systemd/system/kubelet.service.d
 

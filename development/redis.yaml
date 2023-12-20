@@ -34,7 +34,7 @@ spec:
         runAsGroup: 0
       containers:
         - name: redis
-          image: redis:7.0.4-alpine
+          image: redis:7.2.3-alpine
           imagePullPolicy: IfNotPresent
           resources:
             limits:

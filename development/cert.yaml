@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nuget-certs
+  namespace: development
+spec:
+  secretName: nuget-certs
+  duration: 8760h
+  renewBefore: 720h
+  commonName: lass
+  dnsNames:
+    - 'nuget.mirror.lass.net'
+  privateKey:
+    algorithm: Ed25519    
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io

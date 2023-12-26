@@ -19,6 +19,10 @@ spec:
           - kind: Secret
             group: ""
             name: nuget-certs 
+    - name: nuget-http
+      protocol: HTTP
+      port: 80
+      hostname: nuget.mirror.lass.net
 
 ---
 #backend tls policy

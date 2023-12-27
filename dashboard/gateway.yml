@@ -50,6 +50,6 @@ spec:
   hostnames:
     - ui.k8s.lass.net
   rules:
-    - backendRefs:
+      backendRefs:
       - name: kubernetes-dashboard
         port: 443

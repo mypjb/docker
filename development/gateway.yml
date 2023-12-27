@@ -54,6 +54,12 @@ spec:
   hostnames:
     - nuget.mirror.lass.net
   rules:
-    - backendRefs:
+    - filters:
+      - type: RequestHeaderModifier
+        requestHeaderModifier:
+          set:
+            - name: X-Forwarded-Proto
+              value: https 
+      backendRefs:
       - name: nuget
         port: 80

@@ -122,7 +122,9 @@ spec:
       name: tcp 
       protocol: TCP
       targetPort: 27017
+      nodePort: 30017
   selector:
     app: mongo
   sessionAffinity: None
-  type: ClusterIP
+  type: NodePort
+#  type: ClusterIP

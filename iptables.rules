@@ -1,0 +1,5 @@
+iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 30443
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 30080
+iptables -t nat -A PREROUTING -p tcp --dport 6379 -j REDIRECT --to-ports 30379
+iptables -t nat -A PREROUTING -p tcp --dport 3306 -j REDIRECT --to-ports 30306
+iptables -t nat -A PREROUTING -p tcp --dport 27017 -j REDIRECT --to-ports 30017

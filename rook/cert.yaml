@@ -13,6 +13,6 @@ spec:
   privateKey:
     algorithm: Ed25519    
   issuerRef:
-    name: selfsigned-issuer
+    name: ca-issuer
     kind: ClusterIssuer
     group: cert-manager.io

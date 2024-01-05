@@ -11,10 +11,10 @@ spec:
   dnsNames:
     - 'nuget.mirror.lass.net'
   privateKey:
-    algorithm: RSA
+    algorithm: ECDSA
     encoding: PKCS1
-    size: 2048   
+    size: 256
   issuerRef:
-    name: selfsigned-issuer
+    name: ca-issuer
     kind: ClusterIssuer
     group: cert-manager.io

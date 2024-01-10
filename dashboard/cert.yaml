@@ -11,7 +11,8 @@ spec:
   dnsNames:
     - 'ui.k8s.lass.net'
   privateKey:
-    algorithm: Ed25519    
+    algorithm: ECDSA
+    size: 256
   issuerRef:
     name: ca-issuer
     kind: ClusterIssuer
